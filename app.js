@@ -21,6 +21,23 @@ var BlogSchema = mongoose.Schema({
 // Blog model
 var Blog = mongoose.model("Blog", BlogSchema);
 
+// Redirect home to index page
+app.get("/", (req, res) => {
+    res.redirect("/blogs");
+});
+
+// RESTful routes
+// INDEX route
+app.get("/blogs", (req, res) => {
+    Blog.find({}, (err, blogs) => {
+        if(err) {
+            console.log("ERROR!");
+        } else {
+            res.render("index", {blogs: blogs});
+        }
+    });
+});
+
 // Start the server
 app.listen(8080, () => {
     console.log("Server has started");
