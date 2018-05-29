@@ -54,6 +54,17 @@ app.get("/blogs/new", (req, res) => {
     res.render("new");
 })
 
+// SHOW route
+app.get("/blogs/:id", (req, res) => {
+    Blog.findById(req.params.id, (err, blog) => {
+        if(err) {
+            res.redirect("/blogs");
+        } else {
+            res.render("show", {blog: blog});
+        }
+    })
+})
+
 // Start the server
 app.listen(8080, () => {
     console.log("Server has started");
