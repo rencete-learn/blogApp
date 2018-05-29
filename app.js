@@ -6,6 +6,10 @@ var app = express();
 var mongoose = require("mongoose");
 mongoose.connect("mongodb://localhost/restful_blogapp");
 
+// Setup method override
+var methodOverride = require("method-override");
+app.use(methodOverride("_method"));
+
 // Other settings to be used by the app
 app.set("view engine", "ejs");
 app.use(express.static("public"));
@@ -61,6 +65,28 @@ app.get("/blogs/:id", (req, res) => {
             res.redirect("/blogs");
         } else {
             res.render("show", {blog: blog});
+        }
+    })
+})
+
+// EDIT route
+app.get("/blogs/:id/edit", (req, res) => {
+    Blog.findById(req.params.id, (err, blog) => {
+        if(err) {
+            res.redirect("/blogs");
+        } else {
+            res.render("edit", {blog: blog});
+        }
+    })
+})
+
+// UPDATE route
+app.put("/blogs/:id", (req, res) => {
+    Blog.findByIdAndUpdate(req.params.id, req.body.blog, (err, blog) => {
+        if(err) {
+            res.redirect("/blogs/" + req.params.id);
+        } else {
+            res.redirect("/blogs/" + req.params.id);
         }
     })
 })
