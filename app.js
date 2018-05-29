@@ -38,6 +38,22 @@ app.get("/blogs", (req, res) => {
     });
 });
 
+// CREATE 
+app.post("/blogs", (req, res) => {
+    Blog.create(req.body.blog, (err, blog) => {
+        if(err) {
+            res.render("new");
+        } else {
+            res.redirect("/blogs");
+        }
+    })
+})
+
+// NEW route
+app.get("/blogs/new", (req, res) => {
+    res.render("new");
+})
+
 // Start the server
 app.listen(8080, () => {
     console.log("Server has started");
