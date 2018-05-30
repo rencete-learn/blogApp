@@ -13,7 +13,11 @@ app.use(methodOverride("_method"));
 // Other settings to be used by the app
 app.set("view engine", "ejs");
 app.use(express.static("public"));
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({extended: true})); // body-parser
+
+// Text Sanitizer
+var expressSanitizer = require("express-sanitizer");
+app.use(expressSanitizer()); // This must be after body-parser
 
 // Blog Schema
 var BlogSchema = mongoose.Schema({
@@ -44,6 +48,7 @@ app.get("/blogs", (req, res) => {
 
 // CREATE 
 app.post("/blogs", (req, res) => {
+    req.body.blog.body = req.sanitize(req.body.blog.body);
     Blog.create(req.body.blog, (err, blog) => {
         if(err) {
             res.render("new");
@@ -82,6 +87,7 @@ app.get("/blogs/:id/edit", (req, res) => {
 
 // UPDATE route
 app.put("/blogs/:id", (req, res) => {
+    req.body.blog.body = req.sanitize(req.body.blog.body);
     Blog.findByIdAndUpdate(req.params.id, req.body.blog, (err, blog) => {
         if(err) {
             res.redirect("/blogs/" + req.params.id);
