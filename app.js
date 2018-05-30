@@ -50,13 +50,13 @@ app.post("/blogs", (req, res) => {
         } else {
             res.redirect("/blogs");
         }
-    })
-})
+    });
+});
 
 // NEW route
 app.get("/blogs/new", (req, res) => {
     res.render("new");
-})
+});
 
 // SHOW route
 app.get("/blogs/:id", (req, res) => {
@@ -66,8 +66,8 @@ app.get("/blogs/:id", (req, res) => {
         } else {
             res.render("show", {blog: blog});
         }
-    })
-})
+    });
+});
 
 // EDIT route
 app.get("/blogs/:id/edit", (req, res) => {
@@ -77,8 +77,8 @@ app.get("/blogs/:id/edit", (req, res) => {
         } else {
             res.render("edit", {blog: blog});
         }
-    })
-})
+    });
+});
 
 // UPDATE route
 app.put("/blogs/:id", (req, res) => {
@@ -88,8 +88,19 @@ app.put("/blogs/:id", (req, res) => {
         } else {
             res.redirect("/blogs/" + req.params.id);
         }
+    });
+});
+
+// DELETE route
+app.delete("/blogs/:id", (req, res) => {
+    Blog.findByIdAndRemove(req.params.id, (err) => {
+        if(err) {
+            res.redirect("/blogs");
+        } else {
+            res.redirect("/blogs");
+        }
     })
-})
+});
 
 // Start the server
 app.listen(8080, () => {
