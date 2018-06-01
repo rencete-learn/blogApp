@@ -6,28 +6,21 @@ var app = express();
 var mongoose = require("mongoose");
 mongoose.connect("mongodb://localhost/restful_blogapp");
 
-// Setup method override
+// Setup method override for using PUT and DELETE HTML method types
 var methodOverride = require("method-override");
 app.use(methodOverride("_method"));
 
 // Other settings to be used by the app
-app.set("view engine", "ejs");
-app.use(express.static("public"));
-app.use(express.urlencoded({extended: true})); // body-parser
+app.set("view engine", "ejs"); // No longer require ejs extension for the partials
+app.use(express.static("public")); // point to the common assets folder
+app.use(express.urlencoded({extended: true})); // body-parser for putting post data into req.body
 
-// Text Sanitizer
+// Text Sanitizer (to allow sanitizing of user input data)
 var expressSanitizer = require("express-sanitizer");
 app.use(expressSanitizer()); // This must be after body-parser
 
-// Blog Schema
-var BlogSchema = mongoose.Schema({
-    title: String,
-    image: String,
-    body: String,
-    created: {type: Date, default: Date.now}
-});
-// Blog model
-var Blog = mongoose.model("Blog", BlogSchema);
+// Import models
+var Blog = require("./models/Blog");
 
 // Redirect home to index page
 app.get("/", (req, res) => {
